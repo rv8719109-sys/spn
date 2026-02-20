@@ -1,9 +1,16 @@
 <?php
-// go.php — GEO Offer Redirect Router
+// geo.php — GEO Offer Redirect Router + India stays on lander (popup click redirects)
+
+// --------------------
+// NO CACHE
+// --------------------
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
 
+// --------------------
+// Helpers
+// --------------------
 function first_ip($s) {
   $p = explode(',', $s);
   return trim($p[0]);
@@ -51,47 +58,58 @@ function get_json($url, $timeout = 4) {
   return is_array($j) ? $j : null;
 }
 
+// --------------------
+// Country detection
+// --------------------
 $ip = client_ip();
 
-// Detect country (Cloudflare first)
 $country = '';
 if (!empty($_SERVER['HTTP_CF_IPCOUNTRY']) && $_SERVER['HTTP_CF_IPCOUNTRY'] !== 'XX') {
   $country = strtoupper($_SERVER['HTTP_CF_IPCOUNTRY']);
 }
 
-// Fallback geo (ipwho.is)
 if (!$country) {
   $j = get_json('https://ipwho.is/' . urlencode($ip));
-  if ($j && !empty($j['country_code'])) {
-    $country = strtoupper($j['country_code']);
-  }
+  if ($j && !empty($j['country_code'])) $country = strtoupper($j['country_code']);
 }
 
-// Fallback geo (ipapi.co)
 if (!$country) {
   $j = get_json('https://ipapi.co/' . urlencode($ip) . '/json/');
-  if ($j && !empty($j['country_code'])) {
-    $country = strtoupper($j['country_code']);
-  }
+  if ($j && !empty($j['country_code'])) $country = strtoupper($j['country_code']);
 }
 
-// Your offer links
+// --------------------
+// Offers
+// --------------------
 $offerCA = "https://inf4hub.com/?utm_campaign=Ple4hpr7z0&v1=[v1]&v2=[v2]&v3=[v3]";
 $offerNZ = "https://h2n6.com/?utm_campaign=d5sjRjL1yk&v1=[v1]&v2=[v2]&v3=[v3]";
-
-// Default fallback (other countries)
 $default = "/game.html";
 
-// Redirect
+// --------------------
+// Special: INDIA => no auto redirect
+// Instead return JSON so frontend popup controls redirect
+// --------------------
+if ($country === 'IN') {
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    "country" => "IN",
+    "redirect" => false
+  ]);
+  exit;
+}
+
+// CA => auto redirect
 if ($country === 'CA') {
   header("Location: $offerCA", true, 302);
   exit;
 }
+
+// NZ => auto redirect
 if ($country === 'NZ') {
   header("Location: $offerNZ", true, 302);
   exit;
 }
 
-// Other countries
+// All others => fallback
 header("Location: $default", true, 302);
 exit;
