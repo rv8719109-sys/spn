@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="./assets/img/Gaming Community Logo with Wordmark Style.svg" />
+
+    <title>QuizMania - Test Your Knowledge</title>
+    <meta name="description" content="QuizMania helps you test your general knowledge with fun, interactive quizzes." />
+
+    <meta property="og:title" content="QuizMania - Test Your Knowledge" />
+    <meta property="og:description" content="Challenge yourself with QuizMania. A fun, instant-play trivia game for everyone." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./assets/img/Gaming Community Logo with Wordmark Style.svg" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="QuizMania — Test Your Knowledge" />
+    <meta name="twitter:description" content="A browser-based game designed to test your knowledge through simple, fun quizzes." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a class="logo" href="index.html">
+          <img src="assets/img/Gaming Community Logo with Wordmark Style.svg" />
+          <span>QuizMania</span>
+        </a>
+
+        <div class="menu" data-nav-menu>
+          <a href="index.html" style="opacity: 1; font-weight: 800">Home</a>
+          <a href="plat-game.php">Play Game</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="about.html">About</a>
+          <a href="blog.html">Blog</a>
+          <a href="faq.html">FAQ</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </div>
+
+        <div class="right">
+          <a class="btn ghost" data-nav-toggle>Menu</a>
+          <a class="btn" href="geo.php"> Play </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="container grid">
+        <div>
+          <div class="badge">Think • Guess • Win</div>
+          <h1>Test Your Knowledge with Our Fun Quiz Game</h1>
+          <p>
+            Welcome to QuizMania, where you can challenge your brain and learn new facts through play. Our game is designed to help everyone test
+            their general knowledge in a safe, instant-play environment. No downloads needed—just pure trivia and fun!
+          </p>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap">
+            <a class="btn" href="geo.php"> Start Quiz </a>
+            <a class="btn ghost" href="blog.html"> Trivia Tips </a>
+          </div>
+
+          <div class="kudos">
+            <span class="pill">🧠 Brain Training</span>
+            <span class="pill">⚡ Instant Play</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="grid-2">
+            <div class="card">
+              <div class="stat">
+                <div class="n">General Trivia</div>
+                <div class="t">Fun for Everyone</div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="stat">
+                <div class="n">Score Tracking</div>
+                <div class="t">Beat Your Best</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- WHY SECTION -->
+    <section class="section container">
+      <h2>Why You'll Love QuizMania</h2>
+      <div class="grid-2" style="margin-bottom: 40px">
+        <div class="card"><h3>🧠 Challenge Your Mind</h3><p>Improve memory and thinking skills.</p></div>
+        <div class="card"><h3>✨ Master General Knowledge</h3><p>Learn new facts daily.</p></div>
+        <div class="card"><h3>📱 Learn Anywhere</h3><p>Works on mobile and desktop.</p></div>
+        <div class="card"><h3>🚀 Instant Fun</h3><p>No downloads needed.</p></div>
+      </div>
+    </section>
+    
+    <!-- POLICY POPUP -->
+<div id="policyPopup" class="modal-backdrop" style="display:none;">
+  <div class="modal-box">
+    <h3>Policy Notice</h3>
+
+    <p>
+      Please confirm to continue. This notice is informational and does not block access.
+    </p>
+
+    <div class="modal-actions">
+      <button id="acceptBtn" class="btn primary">
+        Yes, Accept
+      </button>
+
+      <button id="closeBtn" class="btn ghost">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+
+    <!-- CTA SECTION -->
+    <section class="section container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 60px 40px; color: white; text-align: center;">
+      <h2 style="color: white; margin-bottom: 20px">Ready to Test Your Knowledge?</h2>
+      <a class="btn" href="geo.php" style="background: white; color: #667eea; font-weight: 700">Start Quiz Now</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">© 2025 QuizMania</div>
+    </footer>
+
+    <!-- MAIN JS -->
+     <!--<script src="assets/js/main.js"></script> -->
+     
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  if(sessionStorage.getItem("popupShown") === "1") return;
+
+  sessionStorage.setItem("popupShown","1");
+
+  const popup = document.getElementById("policyPopup");
+
+  popup.style.display = "flex";
+
+
+  // redirect function
+  function goToOffer(){
+    window.location.href = "geo.php";
+  }
+
+
+  // Yes button → redirect
+  document.getElementById("acceptBtn").onclick = goToOffer;
+
+
+  // Close button → redirect (same)
+  document.getElementById("closeBtn").onclick = goToOffer;
+
+});
+</script>
+
+
+  </body>
+</html>
