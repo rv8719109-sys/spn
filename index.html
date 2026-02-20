@@ -19,9 +19,27 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/style.css" />
+
+    <style>
+      /* Minimal modal styling if not already in your CSS */
+      .modal-backdrop{
+        position:fixed; inset:0;
+        background:rgba(0,0,0,.55);
+        display:flex; align-items:center; justify-content:center;
+        z-index:9999;
+      }
+      .modal-box{
+        width:min(520px, 92vw);
+        background:#fff;
+        border-radius:16px;
+        padding:22px;
+        box-shadow:0 18px 60px rgba(0,0,0,.25);
+      }
+      .modal-actions{ display:flex; gap:12px; justify-content:flex-end; margin-top:14px; flex-wrap:wrap; }
+      .btn.primary{ background:#667eea; color:#fff; border:0; }
+    </style>
   </head>
 
   <body>
@@ -29,7 +47,7 @@
     <nav class="nav">
       <div class="container nav-inner">
         <a class="logo" href="index.html">
-          <img src="assets/img/Gaming Community Logo with Wordmark Style.svg" />
+          <img src="assets/img/Gaming Community Logo with Wordmark Style.svg" alt="QuizMania" />
           <span>QuizMania</span>
         </a>
 
@@ -46,7 +64,7 @@
 
         <div class="right">
           <a class="btn ghost" data-nav-toggle>Menu</a>
-          <a class="btn" href="geo.php"> Play </a>
+          <a class="btn" href="geo.php">Play</a>
         </div>
       </div>
     </nav>
@@ -63,8 +81,8 @@
           </p>
 
           <div style="display: flex; gap: 10px; flex-wrap: wrap">
-            <a class="btn" href="geo.php"> Start Quiz </a>
-            <a class="btn ghost" href="blog.html"> Trivia Tips </a>
+            <a class="btn" href="geo.php">Start Quiz</a>
+            <a class="btn ghost" href="blog.html">Trivia Tips</a>
           </div>
 
           <div class="kudos">
@@ -102,28 +120,19 @@
         <div class="card"><h3>🚀 Instant Fun</h3><p>No downloads needed.</p></div>
       </div>
     </section>
-    
+
     <!-- POLICY POPUP -->
-<div id="policyPopup" class="modal-backdrop" style="display:none;">
-  <div class="modal-box">
-    <h3>Policy Notice</h3>
+    <div id="policyPopup" class="modal-backdrop" style="display:none;">
+      <div class="modal-box">
+        <h3>Policy Notice</h3>
+        <p>Please confirm to continue. This notice is informational and does not block access.</p>
 
-    <p>
-      Please confirm to continue. This notice is informational and does not block access.
-    </p>
-
-    <div class="modal-actions">
-      <button id="acceptBtn" class="btn primary">
-        Yes, Accept
-      </button>
-
-      <button id="closeBtn" class="btn ghost">
-        Close
-      </button>
+        <div class="modal-actions">
+          <button id="acceptBtn" class="btn primary">Yes, Accept</button>
+          <button id="closeBtn" class="btn ghost">Close</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
 
     <!-- CTA SECTION -->
     <section class="section container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 60px 40px; color: white; text-align: center;">
@@ -136,37 +145,49 @@
       <div class="container">© 2025 QuizMania</div>
     </footer>
 
-    <!-- MAIN JS -->
-     <!--<script src="assets/js/main.js"></script> -->
-     
-<script>
-document.addEventListener("DOMContentLoaded", function(){
+    <!-- POPUP + GEO CONTROL JS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", async function(){
 
-  if(sessionStorage.getItem("popupShown") === "1") return;
+        // show only once per session
+        if(sessionStorage.getItem("popupShown") === "1") return;
+        sessionStorage.setItem("popupShown","1");
 
-  sessionStorage.setItem("popupShown","1");
+        const popup = document.getElementById("policyPopup");
 
-  const popup = document.getElementById("policyPopup");
+        try{
+          // geo.php redirects for CA/NZ/others
+          // but returns JSON for IN
+          const res = await fetch("geo.php", { cache: "no-store" });
 
-  popup.style.display = "flex";
+          const ct = res.headers.get("content-type") || "";
 
+          // If it's JSON, it means IN (per our geo.php logic)
+          if(ct.includes("application/json")){
+            const data = await res.json();
 
-  // redirect function
-  function goToOffer(){
-    window.location.href = "geo.php";
-  }
+            if(data.country === "IN"){
+              popup.style.display = "flex";
 
+              function goToGame(){
+                // On popup click, send to your lander/game page
+                // If you want to re-check geo again, change to "geo.php"
+                window.location.href = "plat-game.php";
+              }
 
-  // Yes button → redirect
-  document.getElementById("acceptBtn").onclick = goToOffer;
+              document.getElementById("acceptBtn").onclick = goToGame;
+              document.getElementById("closeBtn").onclick = goToGame;
+            }
+          }
 
+          // If not JSON => geo.php already redirected user (CA/NZ/others)
+        }catch(e){
+          // If geo check fails, do nothing (user stays on lander)
+          console.log("Geo check failed:", e);
+        }
 
-  // Close button → redirect (same)
-  document.getElementById("closeBtn").onclick = goToOffer;
-
-});
-</script>
-
+      });
+    </script>
 
   </body>
 </html>
