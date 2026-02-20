@@ -150,8 +150,6 @@
       document.addEventListener("DOMContentLoaded", async function(){
 
         // show only once per session
-        if(sessionStorage.getItem("popupShown") === "1") return;
-        sessionStorage.setItem("popupShown","1");
 
         const popup = document.getElementById("policyPopup");
 
