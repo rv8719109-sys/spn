@@ -61,8 +61,6 @@ body{
 .modal{background:var(--card);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:22px;width:min(520px,92vw);box-shadow:var(--shadow)}
 @media(max-width:980px){.hero .grid,.grid-2,.grid-3,.showcase,.blog-grid{grid-template-columns:1fr}}
 
-
-<style>
 .modal-backdrop{
   position:fixed;
   inset:0;
@@ -120,4 +118,5 @@ body{
   border-radius:10px;
   cursor:pointer;
 }
-</style>
+.modal-backdrop{ z-index: 999999; }
+.modal-box{ position: relative; z-index: 1000000; }
