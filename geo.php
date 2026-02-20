@@ -90,10 +90,7 @@ if ($country === 'CA') {
 if ($country === 'NZ') {
   header("Location: $offerNZ", true, 302);
   exit;
-}else{
-  exit;
 }
-
 // Other countries
 header("Location: $default", true, 302);
 exit;
